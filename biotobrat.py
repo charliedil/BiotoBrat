@@ -33,14 +33,15 @@ output_dir = sys.argv[2]
 entity = sys.argv[3]
 
 for file in os.listdir(input_dir):  # go through each file in the input directory
-    input_file = open(input_dir+"/"+file, "r") # open it
+    input_file = open(input_dir+"/"+file, "r", encoding="utf-8") # open it
     input_file_text = input_file.read() # read it
     input_file.close() # we close our files in this house!
     docs = input_file_text.split("-DOCSTART- X X O") # use the docstart tags to split the file into "documents"
     print(docs[1])
     filename = 0
     for d in docs: # iterate through the docs
-
+        if filename == 10:
+            print("stop here")
         counter = 0
         entities = {}
         text = ""  #for the full text
@@ -81,12 +82,12 @@ for file in os.listdir(input_dir):  # go through each file in the input director
                         span+=1 # increment span
 
         ## write entities to ann file
-        ann_file = open(output_dir+"/"+str(filename)+".ann", "w")
+        ann_file = open(output_dir+"/"+str(filename)+".ann", "w", encoding="utf-8")
         for e in entities:
             ann_file.write(e+"\t"+entity+" "+str(entities[e][1])+" "+str(entities[e][2])+"\t"+entities[e][0]+"\n")
 
         ## write text to text file
-        text_file = open(output_dir+"/"+str(filename)+".txt", "w")
+        text_file = open(output_dir+"/"+str(filename)+".txt", "w", encoding="utf-8")
         text_file.write(text)
         ##close our files!
         text_file.close()
